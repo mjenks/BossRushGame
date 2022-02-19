@@ -10,6 +10,8 @@ Idea from game puzzle in Advent of Code 2015 day 22
 
 import pygame
 import os
+import player
+import boss
 
 #initialize pygame
 pygame.font.init()
@@ -22,10 +24,12 @@ SIZE = WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Boss Rush")
 
+STAT_FONT = pygame.font.SysFont('comicsans', 40)
+
 FPS = 60
 PAD = 25
 BOSS_SIZE = BOSS_WIDTH, BOSS_HEIGHT = 900, 300
-CHAR_SIZE = CHAR_WIDTH, CHAR_HEIGHT = 120, 180
+CHAR_SIZE = CHAR_WIDTH, CHAR_HEIGHT = 125, 150
 CHAR_IMG_SIZE =  CHAR_WIDTH*10, CHAR_HEIGHT*10 #image has 10 down 10 across
 
 
@@ -38,12 +42,20 @@ DRAGON_IMAGE = pygame.transform.scale(pygame.image.load(os.path.join('Images', '
 #Creative Commons Image obtained from opengameart.org Artist: Calciumtrice
 WIZARD_IMAGES = pygame.transform.scale(pygame.image.load(os.path.join('Images', 'wizard.png')), CHAR_IMG_SIZE)
 
-#game classes
+#game functions
 
 #pygame functions
-def draw_window():
+def draw_window(p1, dragon):
     global frame_count
     WIN.blit(BACKGROUND_IMAGE, (0,0))
+    
+    #display player and boss stats
+    p1_health_text = STAT_FONT.render("HP: " + str(p1.health), 1, WHITE)
+    p1_mana_text = STAT_FONT.render("Mana: " + str(p1.mana), 1, WHITE)
+    dragon_health_text = STAT_FONT.render("Health: " + str(dragon.health), 1, WHITE)
+    WIN.blit(p1_health_text, (PAD, PAD))
+    WIN.blit(p1_mana_text, (PAD, 2*PAD + p1_health_text.get_height()))
+    WIN.blit(dragon_health_text, (WIDTH - dragon_health_text.get_width() - PAD, PAD))
     
     #Animate wizard on screen
     char_step = frame_count//10
@@ -61,6 +73,9 @@ def draw_window():
 
 #pygame run loop
 def run():
+    p1 = player.Wizard()
+    dragon = boss.Boss()    
+    
     play = True
     clock = pygame.time.Clock()
     while play:
@@ -70,7 +85,7 @@ def run():
                 play = False
                 pygame.quit()
         
-        draw_window()
+        draw_window(p1, dragon)
 
 #run game
 if __name__ == "__main__":
