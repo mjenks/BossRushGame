@@ -71,16 +71,23 @@ class Wizard:
         
     def can_cast(self):
         self.spells = []
+        self.spell_text = []
         if self.mana >= 53:
             self.spells.append(self.magic_missile)
+            self.spell_text.append("Magic Missile    53")
         if self.mana >= 73:
             self.spells.append(self.drain)
+            self.spell_text.append("Drain    73")
         if self.mana >= 113 and self.shield_turns == 0:
             self.spells.append(self.shield)
+            self.spell_text.append("Shield    113")
         if self.mana >= 173 and self.poison_turns == 0:
             self.spells.append(self.poison)
+            self.spell_text.append("Poison    173")
         if self.mana >= 229 and self.recharge_turns == 0:
             self.spells.append(self.recharge)
+            self.spell_text.append("Recharge    229")
         if self.mana >= 276:
             self.spells.append(self.cure)
+            self.spell_text.append("Cure    276")
         
