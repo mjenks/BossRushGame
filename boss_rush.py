@@ -25,6 +25,7 @@ WIN = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Boss Rush")
 
 STAT_FONT = pygame.font.SysFont('comicsans', 40)
+SPELL_FONT = pygame.font.SysFont('brushscript', 25)
 
 FPS = 60
 PAD = 25
@@ -54,7 +55,7 @@ def draw_window(p1, dragon):
     p1_mana_text = STAT_FONT.render("Mana: " + str(p1.mana), 1, WHITE)
     dragon_health_text = STAT_FONT.render("Health: " + str(dragon.health), 1, WHITE)
     WIN.blit(p1_health_text, (PAD, PAD))
-    WIN.blit(p1_mana_text, (PAD, 2*PAD + p1_health_text.get_height()))
+    WIN.blit(p1_mana_text, (PAD, PAD + p1_health_text.get_height()))
     WIN.blit(dragon_health_text, (WIDTH - dragon_health_text.get_width() - PAD, PAD))
     
     #Animate wizard on screen
@@ -67,6 +68,13 @@ def draw_window(p1, dragon):
     boss_frame = pygame.Rect(((boss_step%3)*BOSS_WIDTH//3,0), (BOSS_WIDTH//3, BOSS_HEIGHT))
     WIN.blit(DRAGON_IMAGE, (WIDTH//2 + 3*PAD, HEIGHT - BOSS_HEIGHT - 2*PAD), boss_frame)
     
+    #Show current spell list
+    spell_text_height = 2*PAD + p1_health_text.get_height() + p1_mana_text.get_height()
+    for spell in p1.spell_text:
+        spell_text = SPELL_FONT.render(spell, 1, WHITE)
+        WIN.blit(spell_text, (PAD, spell_text_height))
+        spell_text_height += spell_text.get_height()
+    
     frame_count += 1
     
     pygame.display.update()
@@ -74,6 +82,7 @@ def draw_window(p1, dragon):
 #pygame run loop
 def run():
     p1 = player.Wizard()
+    p1.can_cast()
     dragon = boss.Boss()    
     
     play = True
