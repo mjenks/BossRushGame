@@ -10,8 +10,8 @@ import random
 #boss class with attack action
 class Boss:
     """boss character"""
-    hp_range = range(70, 130, 5)
-    dmg_range = range(3, 11)
+    hp_range = range(50, 100, 5)
+    dmg_range = range(3, 9)
     
     def __init__(self):
         self.health = random.choice(self.hp_range)

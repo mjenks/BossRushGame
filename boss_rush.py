@@ -174,7 +174,7 @@ def run():
                 p1.turn_start(dragon)
                 
             if event.type == PLAYER_DEATH:
-                message = "Game Over  " + str(dragons_slain) + " dragons slain")
+                message = "Game Over  " + str(dragons_slain) + " dragons slain"
                 dragons_slain = 0
                 play = False
                 
