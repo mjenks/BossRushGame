@@ -19,6 +19,8 @@ pygame.font.init()
 #Colors
 WHITE = (255, 255, 255)
 RED = (255, 0 , 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
 #Constants
 SIZE = WIDTH, HEIGHT = 900, 500
@@ -30,6 +32,8 @@ SPELL_FONT = pygame.font.SysFont('brushscript', 25)
 SPELL_SELECTED_FONT = pygame.font.SysFont('brushscript', 25)
 SPELL_SELECTED_FONT.set_underline(True)
 MESSAGE_FONT = pygame.font.SysFont('herald', 60)
+EFFECT_FONT = pygame.font.SysFont('jester', 30)
+
 
 FPS = 60
 PAD = 25
@@ -70,14 +74,18 @@ def take_turn(p1, dragon):
     #player casts selected spell
     p1.spells[choice](dragon)
     if check_life(p1,dragon): return
+    draw_turn_effects(p1, dragon)
     #Boss turn
     p1.turn_start(dragon)
     if check_life(p1,dragon): return
+    draw_turn_effects(p1, dragon)
     dragon.attack(p1)
     if check_life(p1,dragon): return
+    draw_turn_effects(p1, dragon)
     #Begining of turn effects for player
     p1.turn_start(dragon)
     if check_life(p1,dragon): return
+    draw_turn_effects(p1, dragon)
     p1.can_cast()
     if len(p1.spells) == 0:
         pygame.event.post(pygame.event.Event(PLAYER_MANA_TOO_LOW))
@@ -92,6 +100,45 @@ def move_selection(keys_pressed, p1):
         choice -= 1
     if keys_pressed[pygame.K_DOWN] and choice < len(p1.spells)-1:  # DOWN
         choice += 1
+
+def draw_turn_effects(p1, dragon):
+    
+    draw_window(p1, dragon)
+    
+    if len(p1.ticks) + len(dragon.ticks) == 0:
+        return
+    
+    for tick in p1.ticks:
+        typ, val = tick
+        effect_text = ""
+        location = (0,0)
+        if typ == "Dmg":
+            effect_text = EFFECT_FONT.render(str(val), 1, RED)
+            location = (WIDTH//4 + CHAR_WIDTH, HEIGHT - PAD - 3*CHAR_HEIGHT//4)
+        elif typ == "Mana":
+            effect_text = EFFECT_FONT.render(str(val), 1, BLUE)
+            location = (WIDTH//4 + CHAR_WIDTH//2, HEIGHT - 2*PAD - CHAR_HEIGHT)
+        elif typ == "Heal":
+            effect_text = EFFECT_FONT.render(str(val), 1, GREEN)
+            location = (WIDTH//4 + CHAR_WIDTH, HEIGHT - PAD - CHAR_HEIGHT)
+        WIN.blit(effect_text, location)
+        p1.ticks.remove(tick)
+        
+    for tick in dragon.ticks:
+        typ, val = tick
+        effect_text = ""
+        location = (0,0)
+        if typ == "Dmg":
+            effect_text = EFFECT_FONT.render(str(val), 1, RED)
+            location = (WIDTH//2 + 2*PAD, HEIGHT - 2*PAD - 3*BOSS_HEIGHT//4)
+        
+        WIN.blit(effect_text, location)
+        dragon.ticks.remove(tick)
+        
+    pygame.display.update()
+    pygame.time.delay(500)
+    
+    
 
 def draw_window(p1, dragon):
     global frame_count

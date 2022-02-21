@@ -59,7 +59,7 @@ class Wizard:
         self.mana -= 75
         self.armor = 7
         self.shield_turns = 8
-        self.ticks.append(("Arm", 7))
+        
         
     def poison(self, boss):
         #Poison costs 125 mana. It starts an effect that lasts for 8 turns. 
@@ -75,6 +75,7 @@ class Wizard:
         #Cure cost 200 mana. It instantly heals you for 15 hit points.
         self.mana -= 200
         self.health += 15
+        self.ticks.append(("Heal", 15))
         
     def can_cast(self):
         self.spells = []

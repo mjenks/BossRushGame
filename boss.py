@@ -19,4 +19,6 @@ class Boss:
         self.ticks = []
         
     def attack(self, player):
-        player.health -= max(1, self.damage - player.armor)
+        dmg = max(1, self.damage - player.armor)
+        player.health -= dmg
+        player.ticks.append("Dmg", dmg)
