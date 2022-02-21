@@ -102,11 +102,9 @@ def draw_window(p1, dragon):
     p1_health_text = STAT_FONT.render("HP: " + str(p1.health), 1, WHITE)
     p1_mana_text = STAT_FONT.render("Mana: " + str(p1.mana), 1, WHITE)
     dragon_health_text = STAT_FONT.render("Health: " + str(dragon.health), 1, WHITE)
-    dragon_attack_text = STAT_FONT.render("Strength: " + str(dragon.damage), 1, WHITE)
     WIN.blit(p1_health_text, (PAD, PAD))
     WIN.blit(p1_mana_text, (PAD, PAD + p1_health_text.get_height()))
     WIN.blit(dragon_health_text, (WIDTH - dragon_health_text.get_width() - PAD, PAD))
-    WIN.blit(dragon_attack_text, (WIDTH- dragon_health_text.get_width(), PAD + dragon_health_text.get_height()))
     
     #Animate wizard on screen
     char_step = frame_count//10

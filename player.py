@@ -16,12 +16,14 @@ class Wizard:
         self.shield_turns = 0
         self.poison_turns = 0
         self.recharge_turns = 0
+        self.ticks = []
         
         
     def turn_start(self, boss):
         #While shield is active, your armor is increased by 7.
         if self.shield_turns != 0:
             self.shield_turns -= 1
+            if self.shield_turns == 0: self.ticks.append(("Arm", -7))
         else:
             self.armor = 0
             
@@ -29,65 +31,70 @@ class Wizard:
         if self.poison_turns != 0:
             self.poison_turns -= 1
             boss.health -= 3
+            boss.ticks.append(("Dmg", 3))
         
         #At the start of each turn while recharge is active, it gives you 101 new mana.
         if self.recharge_turns != 0:
             self.recharge_turns -= 1
             self.mana += 101
+            self.ticks.append(("Mana", 101))
         
         
     def magic_missile(self, boss):
-        #Magic Missile costs 53 mana. It instantly does 4 damage.
-        self.mana -= 53
+        #Magic Missile costs 25 mana. It instantly does 4 damage.
+        self.mana -= 25
         boss.health -= 4
+        boss.ticks.append(("Dmg", 4))
         
     def drain(self, boss):
-        #Drain costs 73 mana. It instantly does 2 damage and heals you for 2 hit points.
-        self.mana -= 73
+        #Drain costs 50 mana. It instantly does 2 damage and heals you for 2 hit points.
+        self.mana -= 50
         self.health += 2
         boss.health -= 2
+        boss.ticks.append(("Dmg", 4))
         
     def shield(self, boss):
-        #Shield costs 113 mana. It starts an effect that lasts for 6 turns. 
+        #Shield costs 75 mana. It starts an effect that lasts for 8 turns. 
         #While shield is active, your armor is increased by 7.
-        self.mana -= 113
+        self.mana -= 75
         self.armor = 7
-        self.shield_turns = 6
+        self.shield_turns = 8
+        self.ticks.append(("Arm", 7))
         
     def poison(self, boss):
-        #Poison costs 173 mana. It starts an effect that lasts for 6 turns. 
-        self.mana -= 173
-        self.poison_turns = 6
+        #Poison costs 125 mana. It starts an effect that lasts for 8 turns. 
+        self.mana -= 125
+        self.poison_turns = 8
         
     def recharge(self, boss):
-        #Recharge costs 229 mana. It starts an effect that lasts for 5 turns. 
-        self.mana -= 229
-        self.recharge_turns = 5
+        #Recharge costs 175 mana. It starts an effect that lasts for 7 turns. 
+        self.mana -= 175
+        self.recharge_turns = 7
         
     def cure(self, boss):
-        #Cure cost 276 mana. It instantly heals you for 12 hit points.
-        self.mana -= 276
-        self.health += 12
+        #Cure cost 200 mana. It instantly heals you for 15 hit points.
+        self.mana -= 200
+        self.health += 15
         
     def can_cast(self):
         self.spells = []
         self.spell_text = []
-        if self.mana >= 53:
+        if self.mana >= 25:
             self.spells.append(self.magic_missile)
-            self.spell_text.append("Magic Missile    53")
-        if self.mana >= 73:
+            self.spell_text.append("Magic Missile    25")
+        if self.mana >= 50:
             self.spells.append(self.drain)
-            self.spell_text.append("Drain    73")
-        if self.mana >= 113 and self.shield_turns == 0:
+            self.spell_text.append("Drain    50")
+        if self.mana >= 75 and self.shield_turns == 0:
             self.spells.append(self.shield)
-            self.spell_text.append("Shield    113")
-        if self.mana >= 173 and self.poison_turns == 0:
+            self.spell_text.append("Shield    75")
+        if self.mana >= 125 and self.poison_turns == 0:
             self.spells.append(self.poison)
-            self.spell_text.append("Poison    173")
-        if self.mana >= 229 and self.recharge_turns == 0:
+            self.spell_text.append("Poison    125")
+        if self.mana >= 175 and self.recharge_turns == 0:
             self.spells.append(self.recharge)
-            self.spell_text.append("Recharge    229")
-        if self.mana >= 276:
+            self.spell_text.append("Recharge    175")
+        if self.mana >= 200:
             self.spells.append(self.cure)
-            self.spell_text.append("Cure    276")
+            self.spell_text.append("Cure    200")
         
